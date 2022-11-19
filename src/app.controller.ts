@@ -3,6 +3,8 @@ import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
+  // vừa khai báo vừa khởi tạo
+  // dependency injection: là một kĩ thuật trong lập trình hướng đối tượng, cho phép một đối tượng (hay thực thể) có thể nhúng (hoặc chèn) các đối tượng khác vào trong nó.
   constructor(private readonly appService: AppService) {}
 
   @Get()
