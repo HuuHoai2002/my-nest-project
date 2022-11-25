@@ -6,7 +6,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/users.entity';
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
@@ -40,5 +40,22 @@ export class UserService {
 
   async remove(id: number): Promise<void> {
     await this.userRepository.delete(id);
+  }
+
+  private readonly users = [
+    {
+      userId: 1,
+      username: 'john',
+      password: 'changeme',
+    },
+    {
+      userId: 2,
+      username: 'maria',
+      password: 'guess',
+    },
+  ];
+
+  async getOne(username: string): Promise<any | undefined> {
+    return this.users.find((user) => user.username === username);
   }
 }

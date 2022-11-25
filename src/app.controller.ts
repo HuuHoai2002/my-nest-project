@@ -1,35 +1,31 @@
-import { Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { AuthService } from './auth/auth.service';
+import { Role, Roles } from './auth/decorators/roles.decorator';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { LocalAuthGuard } from './auth/guards/local-auth.guard';
+import { RolesGuard } from './auth/guards/roles.guard';
 
-@Controller('controller')
+@Controller()
 export class AppController {
-  // vừa khai báo vừa khởi tạo
-  // dependency injection: là một kĩ thuật trong lập trình hướng đối tượng, cho phép một đối tượng (hay thực thể) có thể nhúng (hoặc chèn) các đối tượng khác vào trong nó.
-  constructor(private readonly appService: AppService) {}
+  constructor(private authService: AuthService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @UseGuards(LocalAuthGuard)
+  @Post('auth/login')
+  async login(@Request() req) {
+    return this.authService.login(req.user);
   }
 
-  @Get('/:id')
-  getController(@Param() param: string, @Query() query: string) {
-    console.log(param, query);
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
+  }
+  @Get('test')
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async testRole() {
     return {
-      message: 'Hello from controller',
-      param,
-      query,
+      message: 'You have access to this route',
     };
   }
-  // result: http://localhost:3000/controller/1?name=John => { message: 'Hello from controller', param: {id: 1}, query: 'John' }
-  @Post('/:id')
-  postController(@Param() param: string, @Query() query: string) {
-    console.log(param, query);
-    return {
-      message: 'Hello from controller',
-      param,
-      query,
-    };
-  }
-  // result: http://localhost:3000/controller/1?name=John => { message: 'Hello from controller', param: {id: 1}, query: 'John' }
 }
