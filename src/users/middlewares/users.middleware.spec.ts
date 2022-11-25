@@ -1,4 +1,4 @@
-import { UserMiddleware } from './user.middleware';
+import { UserMiddleware } from './users.middleware';
 
 describe('UserMiddleware', () => {
   it('should be defined', () => {
