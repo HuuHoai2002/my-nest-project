@@ -18,6 +18,16 @@ export class AuthService {
     return null;
   }
 
+  private getRefreshToken(sub: string): string {
+    return this.jwtService.sign(
+      { sub },
+      {
+        secret: 'refresh',
+        expiresIn: '7d',
+      },
+    );
+  }
+
   async login(user: any) {
     const payload = {
       username: user.username,
@@ -26,6 +36,7 @@ export class AuthService {
     };
     return {
       access_token: this.jwtService.sign(payload),
+      refresh_token: this.getRefreshToken(user.userId),
       ...payload,
     };
   }

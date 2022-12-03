@@ -12,18 +12,22 @@ export class AppController {
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
+    // console.log(req.user);
     return this.authService.login(req.user);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('profile')
+  @UseGuards(JwtAuthGuard)
   getProfile(@Request() req) {
+    // console.log(req.user);
     return req.user;
   }
+
   @Get('test')
   @Roles(Role.Admin)
   @UseGuards(JwtAuthGuard, RolesGuard)
-  async testRole() {
+  async testRole(@Request() req) {
+    console.log(req.user);
     return {
       message: 'You have access to this route',
     };
