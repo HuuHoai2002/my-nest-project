@@ -9,4 +9,13 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+
+  @Get('test')
+  getTest() {
+    return {
+      name: "Nghiêm Hữu Hoài",
+      id: "2021050273",
+      class_id: "DCCTOM65C"
+    }
+  }
 }
